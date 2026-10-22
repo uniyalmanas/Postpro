@@ -105,3 +105,5 @@ scratchpad-logs/
 # only appear when a tool is invoked from the repo root by hand.
 /reports/
 /test-results/
+
+graphify-out/
