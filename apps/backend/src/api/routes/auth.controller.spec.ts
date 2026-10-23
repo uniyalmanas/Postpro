@@ -129,7 +129,7 @@ describe('AuthController — F1 behavioural tests', () => {
       );
 
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith('Registration failed');
+      expect(res.send).toHaveBeenCalledWith('Registration is disabled');
       expect(res.cookie).not.toHaveBeenCalledWith('auth', expect.anything(), expect.anything());
     });
   });

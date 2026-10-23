@@ -69,6 +69,29 @@ pids+=($!)
 (cd /app/apps/frontend && /app/node_modules/.bin/next start -H 127.0.0.1 -p 4200) &
 pids+=($!)
 
+# Wait for the NestJS backend to be ready on :3000 before opening nginx on :5000.
+# This ensures Railway edge never routes requests to an unready container or encounters 502s.
+echo "Waiting for backend on :3000 to be ready..."
+backend_ready=0
+for i in $(seq 1 60); do
+  if curl -sf http://127.0.0.1:3000/health/live >/dev/null 2>&1; then
+    backend_ready=1
+    echo "Backend is ready on :3000!"
+    break
+  fi
+  if ! kill -0 "${pids[0]}" 2>/dev/null; then
+    echo "Backend process exited prematurely during boot"
+    exit 1
+  fi
+  sleep 1
+done
+
+if [ "$backend_ready" -ne 1 ]; then
+  echo "Backend failed to become ready within 60s"
+  exit 1
+fi
+
+echo "Starting nginx reverse proxy on :5000..."
 nginx -c /app/docker/nginx.prod.conf &
 pids+=($!)
 

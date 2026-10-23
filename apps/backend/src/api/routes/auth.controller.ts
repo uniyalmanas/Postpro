@@ -131,8 +131,9 @@ export class AuthController {
         register: true,
       });
     } catch (e: any) {
-      Logger.error('Registration failed', e instanceof Error ? e.message : String(e), AuthController.name);
-      response.status(400).send('Registration failed');
+      const message = e instanceof Error ? e.message : String(e);
+      Logger.error('Registration failed', message, AuthController.name);
+      response.status(400).send(message || 'Registration failed');
     }
   }
 
