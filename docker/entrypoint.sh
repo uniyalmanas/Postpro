@@ -61,12 +61,12 @@ mkdir -p /tmp/nginx
 
 pids=()
 
-node --max-old-space-size=1536 --experimental-require-module /app/apps/backend/dist/apps/backend/src/main.js &
+node --expose-gc --optimize-for-size --max-old-space-size=384 --experimental-require-module /app/apps/backend/dist/apps/backend/src/main.js &
 pids+=($!)
 
 # `pnpm prune --prod` empties the per-workspace node_modules; all production
 # deps (incl. `next`) resolve from the root /app/node_modules instead.
-(cd /app/apps/frontend && /app/node_modules/.bin/next start -H 127.0.0.1 -p 4200) &
+(cd /app/apps/frontend && NODE_OPTIONS="--max-old-space-size=160" /app/node_modules/.bin/next start -H 127.0.0.1 -p 4200) &
 pids+=($!)
 
 # Wait for the NestJS backend to be ready on :3000 before opening nginx on :5000.

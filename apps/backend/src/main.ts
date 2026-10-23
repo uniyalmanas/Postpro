@@ -184,7 +184,9 @@ async function start() {
   app.useGlobalFilters(new PostValidationExceptionFilter());
   app.useGlobalFilters(new HttpExceptionFilter());
 
-  loadSwagger(app);
+  if (process.env.ENABLE_SWAGGER === 'true' || isDev()) {
+    loadSwagger(app);
+  }
 
   const port = process.env.PORT || 3000;
 
@@ -246,6 +248,12 @@ async function start() {
     });
 
     Logger.log(`🚀 Backend is running on: http://localhost:${port}`);
+    if ((global as any).gc) {
+      try {
+        (global as any).gc();
+        Logger.log('Post-bootstrap garbage collection completed');
+      } catch {}
+    }
   } catch (e) {
     Logger.error(`Backend failed to start on port ${port}`, e);
   }
