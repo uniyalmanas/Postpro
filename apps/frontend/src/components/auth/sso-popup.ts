@@ -58,15 +58,18 @@ export function navigateAfterAuth(
   getAndClearReturnUrl: () => string | null
 ) {
   const returnUrl = getAndClearReturnUrl();
-  if (returnUrl) {
+  if (returnUrl && returnUrl !== 'null' && returnUrl !== '/null' && returnUrl !== 'undefined') {
     try {
       const parsed = new URL(returnUrl, window.location.origin);
-      window.location.href =
-        parsed.origin !== window.location.origin ? '/' : returnUrl;
+      if (parsed.pathname !== '/null') {
+        window.location.href =
+          parsed.origin !== window.location.origin ? '/' : returnUrl;
+        return;
+      }
     } catch {
       window.location.href = '/';
+      return;
     }
-    return;
   }
   if (action === 'onboarding') {
     window.location.href = '/dashboard';

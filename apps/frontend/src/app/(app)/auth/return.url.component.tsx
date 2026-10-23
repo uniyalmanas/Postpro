@@ -6,13 +6,16 @@ const ReturnUrlComponent: FC = () => {
   const params = useSearchParams();
   const url = params.get('returnUrl');
   useEffect(() => {
+    if (!url || url === 'null' || url === 'undefined') {
+      return;
+    }
     try {
       // Resolved against our own origin so a relative returnUrl is honoured
       // rather than throwing into the catch below and vanishing; the origin
       // check still rejects an absolute off-site value.
-      const parsed = new URL(url!, window.location.origin);
-      if (parsed.origin === window.location.origin) {
-        localStorage.setItem('returnUrl', url!);
+      const parsed = new URL(url, window.location.origin);
+      if (parsed.origin === window.location.origin && parsed.pathname !== '/null') {
+        localStorage.setItem('returnUrl', url);
       }
     } catch {
     }
@@ -24,6 +27,9 @@ export const useReturnUrl = () => {
     getAndClear: useCallback(() => {
       const data = localStorage.getItem('returnUrl');
       localStorage.removeItem('returnUrl');
+      if (!data || data === 'null' || data === 'undefined' || data === '/null') {
+        return null;
+      }
       return data;
     }, []),
   };
