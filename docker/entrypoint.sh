@@ -61,7 +61,7 @@ mkdir -p /tmp/nginx
 
 pids=()
 
-node --experimental-require-module /app/apps/backend/dist/apps/backend/src/main.js &
+node --max-old-space-size=1536 --experimental-require-module /app/apps/backend/dist/apps/backend/src/main.js &
 pids+=($!)
 
 # `pnpm prune --prod` empties the per-workspace node_modules; all production
