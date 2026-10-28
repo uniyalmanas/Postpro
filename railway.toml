@@ -1,5 +1,4 @@
 [phases.setup]
-    # nodejs_22 pinned deliberately: package.json requires node >=22.12.0 <23.0.0,
-    # and an unpinned `nodejs` resolves to whatever the nixpacks base provides.
-    nixPkgs = ['nodejs_22', 'python3']
+    # nodejs_24 pinned to match package.json engine requirement (>=24.0.0 <25.0.0)
+    nixPkgs = ['nodejs_24', 'python3']
     aptPkgs = ['build-essential', 'libudev-dev', 'libcairo2-dev', 'libjpeg-dev', 'libpango1.0-dev', 'libgif-dev', 'libpixman-1-dev']

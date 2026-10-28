@@ -8,29 +8,6 @@ import {
 } from '@solana/wallet-adapter-react';
 import { useWalletMultiButton } from '@solana/wallet-adapter-base-ui';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
-import { BitgetWalletAdapter } from '@solana/wallet-adapter-bitkeep';
-import { CloverWalletAdapter } from '@solana/wallet-adapter-clover';
-import { Coin98WalletAdapter } from '@solana/wallet-adapter-coin98';
-import { FractalWalletAdapter } from '@solana/wallet-adapter-fractal';
-import { HyperPayWalletAdapter } from '@solana/wallet-adapter-hyperpay';
-import { KeystoneWalletAdapter } from '@solana/wallet-adapter-keystone';
-import { KrystalWalletAdapter } from '@solana/wallet-adapter-krystal';
-import { LedgerWalletAdapter } from '@solana/wallet-adapter-ledger';
-import { MathWalletAdapter } from '@solana/wallet-adapter-mathwallet';
-import { NightlyWalletAdapter } from '@solana/wallet-adapter-nightly';
-import { NufiWalletAdapter } from '@solana/wallet-adapter-nufi';
-import { OntoWalletAdapter } from '@solana/wallet-adapter-onto';
-import { ParticleAdapter } from '@solana/wallet-adapter-particle';
-import { PhantomWalletAdapter } from '@solana/wallet-adapter-phantom';
-import { SafePalWalletAdapter } from '@solana/wallet-adapter-safepal';
-import { SaifuWalletAdapter } from '@solana/wallet-adapter-saifu';
-import { SalmonWalletAdapter } from '@solana/wallet-adapter-salmon';
-import { SolflareWalletAdapter } from '@solana/wallet-adapter-solflare';
-import { TokenaryWalletAdapter } from '@solana/wallet-adapter-tokenary';
-import { TokenPocketWalletAdapter } from '@solana/wallet-adapter-tokenpocket';
-import { TorusWalletAdapter } from '@solana/wallet-adapter-torus';
-import { TrustWalletAdapter } from '@solana/wallet-adapter-trust';
-import { XDEFIWalletAdapter } from '@solana/wallet-adapter-xdefi';
 import {
   WalletModalProvider,
   useWalletModal,
@@ -55,34 +32,8 @@ const WalletProvider = () => {
 export const ButtonCaster: FC<{
   login: (code: string) => void;
 }> = (props) => {
-  const wallets = useMemo(
-    () => [
-      new TokenPocketWalletAdapter(),
-      new TorusWalletAdapter(),
-      new BitgetWalletAdapter(),
-      new CloverWalletAdapter(),
-      new Coin98WalletAdapter(),
-      new FractalWalletAdapter(),
-      new HyperPayWalletAdapter(),
-      new KeystoneWalletAdapter(),
-      new KrystalWalletAdapter(),
-      new LedgerWalletAdapter(),
-      new MathWalletAdapter(),
-      new NightlyWalletAdapter(),
-      new NufiWalletAdapter(),
-      new OntoWalletAdapter(),
-      new ParticleAdapter(),
-      new PhantomWalletAdapter(),
-      new SafePalWalletAdapter(),
-      new SaifuWalletAdapter(),
-      new SalmonWalletAdapter(),
-      new SolflareWalletAdapter(),
-      new TokenaryWalletAdapter(),
-      new TrustWalletAdapter(),
-      new XDEFIWalletAdapter(),
-    ],
-    []
-  );
+  // Modern wallets (Phantom, Solflare, Backpack, etc.) auto-register via the Solana Wallet Standard.
+  const wallets = useMemo(() => [], []);
   return (
     <ConnectionProvider endpoint={ENDPOINT}>
       <WalletProviderWrapper wallets={wallets} autoConnect={false}>

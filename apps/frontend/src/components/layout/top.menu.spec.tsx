@@ -136,10 +136,19 @@ describe('TopMenu', () => {
       expect(result.current.firstMenu[0].name).toBe('Home');
     });
 
-    it('keeps the remaining firstMenu items sorted alphabetically', () => {
+    it('orders firstMenu items according to logical workflow', () => {
       const { result } = renderHook(() => useMenuItem());
-      const remaining = result.current.firstMenu.slice(1).map((i) => i.name);
-      expect(remaining).toEqual([...remaining].sort((a, b) => a.localeCompare(b)));
+      const paths = result.current.firstMenu.map((i) => i.path);
+      expect(paths).toEqual([
+        '/dashboard',
+        '/posts',
+        '/replies',
+        '/analytics',
+        '/media',
+        '/files',
+        '/campaigns',
+        '/agents',
+      ]);
     });
 
     it('highlights Home as active on /dashboard', () => {

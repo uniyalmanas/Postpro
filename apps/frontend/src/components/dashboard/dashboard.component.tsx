@@ -129,26 +129,17 @@ export const DashboardComponent = () => {
         onBriefClick={() => setBriefOpen((o) => !o)}
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-[12px]">
-        <div className="lg:col-span-12 order-first lg:order-1">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-[16px]">
+        <div className="lg:col-span-12">
           <DailyBrief open={briefOpen} onOpenChange={setBriefOpen} />
         </div>
 
-        <div className="lg:col-span-12 order-first lg:order-1">
+        <div className="lg:col-span-12">
           <DashboardSetup />
         </div>
 
-        <div className="lg:col-span-12 order-1 lg:order-2">
-          <SectionCard
-            id="attention"
-            title={t('needs_attention', 'Needs attention')}
-            badge={attention?.items?.length}
-          >
-            <AttentionFeed />
-          </SectionCard>
-        </div>
-
-        <div className="lg:col-span-12 order-2 lg:order-5">
+        {/* 1. Core Workflow: Next 7 Days Schedule Timeline */}
+        <div className="lg:col-span-12">
           <SectionCard
             id="schedule"
             title={t('next_7_days', 'Next 7 days')}
@@ -163,7 +154,8 @@ export const DashboardComponent = () => {
           </SectionCard>
         </div>
 
-        <div className="lg:col-span-4 order-3 lg:order-3">
+        {/* 2. Key Metrics & Engagement Trend */}
+        <div className="lg:col-span-4">
           <SectionCard
             id="kpi"
             title={t('kpi_at_a_glance', 'At a glance')}
@@ -178,7 +170,7 @@ export const DashboardComponent = () => {
           </SectionCard>
         </div>
 
-        <div className="lg:col-span-8 order-4 lg:order-4">
+        <div className="lg:col-span-8">
           <SectionCard
             id="trend"
             title={t('trend_title', '7-day engagement')}
@@ -203,18 +195,18 @@ export const DashboardComponent = () => {
           </SectionCard>
         </div>
 
-        <div className="lg:col-span-6 order-6 lg:order-6">
+        {/* 3. Action Items: Needs Attention & Inbox */}
+        <div className="lg:col-span-6">
           <SectionCard
-            id="campaigns"
-            title={t('active_campaigns', 'Active campaigns')}
-            viewAllHref="/campaigns"
-            permission={['posts', 'read']}
+            id="attention"
+            title={t('needs_attention', 'Needs attention')}
+            badge={attention?.items?.length}
           >
-            <CampaignsWidget />
+            <AttentionFeed />
           </SectionCard>
         </div>
 
-        <div className="lg:col-span-6 order-5 lg:order-6">
+        <div className="lg:col-span-6">
           <SectionCard
             id="inbox"
             title={t('inbox', 'Inbox')}
@@ -226,7 +218,19 @@ export const DashboardComponent = () => {
           </SectionCard>
         </div>
 
-        <div className="lg:col-span-6 order-7 lg:order-7">
+        {/* 4. Campaigns & Media Processing */}
+        <div className="lg:col-span-6">
+          <SectionCard
+            id="campaigns"
+            title={t('active_campaigns', 'Active campaigns')}
+            viewAllHref="/campaigns"
+            permission={['posts', 'read']}
+          >
+            <CampaignsWidget />
+          </SectionCard>
+        </div>
+
+        <div className="lg:col-span-6">
           <SectionCard
             id="media"
             title={t('media_queue', 'Media queue')}
@@ -238,7 +242,8 @@ export const DashboardComponent = () => {
           </SectionCard>
         </div>
 
-        <div className="lg:col-span-6 order-8 lg:order-7">
+        {/* 5. Resource Usage & Recommendations */}
+        <div className="lg:col-span-6">
           <SectionCard
             id="usage"
             title={t('usage_budget', 'Usage & budget')}
@@ -249,7 +254,7 @@ export const DashboardComponent = () => {
           </SectionCard>
         </div>
 
-        <div className="lg:col-span-12 order-9 lg:order-8">
+        <div className="lg:col-span-6">
           <SectionCard
             id="recommendations"
             title={t('recommendations_label', 'Recommendations')}

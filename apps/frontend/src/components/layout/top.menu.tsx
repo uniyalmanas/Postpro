@@ -242,12 +242,26 @@ export const useMenuItem = () => {
     },
   ] satisfies MenuItemInterface[] as MenuItemInterface[];
 
-  firstMenu.sort((a, b) => a.name.localeCompare(b.name));
-  const homeIndex = firstMenu.findIndex((item) => item.path === '/dashboard');
-  if (homeIndex > 0) {
-    const [home] = firstMenu.splice(homeIndex, 1);
-    firstMenu.unshift(home);
-  }
+  // Logical workflow ordering: Home -> Posts -> Replies -> Analytics -> Media -> Files -> Campaigns -> Agent
+  const pathPriority = [
+    '/dashboard',
+    '/posts',
+    '/replies',
+    '/analytics',
+    '/media',
+    '/files',
+    '/campaigns',
+    '/agents',
+  ];
+
+  firstMenu.sort((a, b) => {
+    const idxA = pathPriority.indexOf(a.path);
+    const idxB = pathPriority.indexOf(b.path);
+    if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+    if (idxA !== -1) return -1;
+    if (idxB !== -1) return 1;
+    return a.name.localeCompare(b.name);
+  });
 
   return {
     all: [...firstMenu, ...secondMenu],
