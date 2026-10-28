@@ -66,7 +66,7 @@ pids+=($!)
 
 # `pnpm prune --prod` empties the per-workspace node_modules; all production
 # deps (incl. `next`) resolve from the root /app/node_modules instead.
-(cd /app/apps/frontend && NODE_OPTIONS="--max-old-space-size=160" /app/node_modules/.bin/next start -H 127.0.0.1 -p 4200) &
+(cd /app/apps/frontend && NODE_OPTIONS="--max-old-space-size=512" /app/node_modules/.bin/next start -H 0.0.0.0 -p 4200) &
 pids+=($!)
 
 # Wait for the NestJS backend to be ready on :3000 before opening nginx on :5000.
@@ -88,6 +88,28 @@ done
 
 if [ "$backend_ready" -ne 1 ]; then
   echo "Backend failed to become ready within 60s"
+  exit 1
+fi
+
+# Also wait for the Next.js frontend to be ready on :4200 before opening nginx.
+echo "Waiting for frontend on :4200 to be ready..."
+frontend_ready=0
+for i in $(seq 1 60); do
+  code=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:4200/ || true)
+  if [ -n "$code" ] && [ "$code" != "000" ]; then
+    frontend_ready=1
+    echo "Frontend is ready on :4200! (HTTP $code)"
+    break
+  fi
+  if ! kill -0 "${pids[1]}" 2>/dev/null; then
+    echo "Frontend process exited prematurely during boot"
+    exit 1
+  fi
+  sleep 1
+done
+
+if [ "$frontend_ready" -ne 1 ]; then
+  echo "Frontend failed to become ready within 60s"
   exit 1
 fi
 
